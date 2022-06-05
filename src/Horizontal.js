@@ -8,8 +8,8 @@ import {
   Platform,
 } from 'react-native';
 //const { width, height } = Dimensions.get('window');
-const width = this.props.width;
-const height = this.props.height;
+const width = 350; // Edit these
+const height = 500; // Edit these
 const PESPECTIVE = Platform.OS === 'ios' ? 2.38 : 2.2;
 const TR_POSITION = Platform.OS === 'ios' ? 2 : 1.4;
 
@@ -289,14 +289,10 @@ CubeNavigationHorizontal.propTypes = {
   responderCaptureDx: PropTypes.number,
   expandView: PropTypes.bool,
   loop: PropTypes.bool,
-  width: PropTypes.number,
-  height: PropTypes.number,
 };
 
 CubeNavigationHorizontal.defaultProps = {
   responderCaptureDx: 60,
   expandView: false,
   loop: false,
-  width: 350,
-  height: 500,
 };

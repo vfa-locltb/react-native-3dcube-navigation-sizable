@@ -7,9 +7,10 @@ import {
   StyleSheet,
   Platform,
 } from 'react-native';
-//const { width, height } = Dimensions.get('window');
-const width = 350; // Edit these
-const height = 500; // Edit these
+const widthDimension = Dimensions.get('window').width;
+const heightDimension = Dimensions.get('window').height;
+const width = parseInt(widthDimension * 0.9); // Edit these
+const height = parseInt(heightDimension * 0.5); // Edit these
 const PESPECTIVE = Platform.OS === 'ios' ? 2.38 : 2.2;
 const TR_POSITION = Platform.OS === 'ios' ? 2 : 1.4;
 
@@ -24,9 +25,8 @@ export default class CubeNavigationHorizontal extends React.Component {
       currentPage: this.props.initialPage || 0,
       scrollLockPage: this.pages[this.props.scrollLockPage],
     };
-  }
 
-  componentWillMount() {
+    // Move this back to componentWillMount if errors
     this._animatedValue = new Animated.ValueXY();
     this._animatedValue.setValue({
       x: this.pages[this.state.currentPage],
@@ -54,6 +54,7 @@ export default class CubeNavigationHorizontal extends React.Component {
         toValue: { x: goTo, y: 0 },
         friction: 3,
         tension: 0.6,
+        useNativeDriver: false, // <-- Add this
       }).start();
       setTimeout(() => {
         this.setState({
@@ -85,7 +86,9 @@ export default class CubeNavigationHorizontal extends React.Component {
             this._animatedValue.setOffset({ x: -(this.fullWidth + width) });
           }
         }
-        Animated.event([null, { dx: this._animatedValue.x }])(e, gestureState);
+        Animated.event([null, { dx: this._animatedValue.x }], {
+          useNativeDriver: false,
+        })(e, gestureState);
       },
       onPanResponderRelease: (e, gestureState) => {
         onDoneSwiping(gestureState);
@@ -96,14 +99,24 @@ export default class CubeNavigationHorizontal extends React.Component {
     });
   }
 
-  componentWillReceiveProps(props) {
-    this.setState({
-      scrollLockPage: props.scrollLockPage
-        ? this.pages[props.scrollLockPage]
-        : undefined,
-    });
-  }
+  // componentWillMount() {
 
+  // }
+
+  // componentWillReceiveProps(props) {
+  //   this.setState({
+  //     scrollLockPage: props.scrollLockPage
+  //       ? this.pages[props.scrollLockPage]
+  //       : undefined,
+  //   });
+  // }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.scrollLockPage) {
+      return { scrollLockPage: this.pages[props.scrollLockPage] }; // <- this is setState equivalent
+    }
+    return { scrollLockPage: undefined };
+  }
   /*
     @page: index
   */
@@ -115,6 +128,7 @@ export default class CubeNavigationHorizontal extends React.Component {
         toValue: { x: this.pages[page], y: 0 },
         friction: 4,
         tension: 0.8,
+        useNativeDriver: false, // <-- Add this
       }).start();
     } else {
       this._animatedValue.setValue({ x: this.pages[page], y: 0 });
@@ -257,7 +271,7 @@ export default class CubeNavigationHorizontal extends React.Component {
 
     return (
       <Animated.View
-        //style={[{ position: 'absolute' }]}
+        style={[{ position: 'absolute' }]}
         ref={(view) => {
           this._scrollView = view;
         }}

@@ -10,7 +10,7 @@ import {
 const widthDimension = Dimensions.get('window').width;
 const heightDimension = Dimensions.get('window').height;
 const width = parseInt(widthDimension * 0.9); // Edit these
-const height = parseInt(heightDimension * 0.5); // Edit these
+const height = parseInt(heightDimension * 0.45); // Edit these
 const PESPECTIVE = Platform.OS === 'ios' ? 2.38 : 2.2;
 const TR_POSITION = Platform.OS === 'ios' ? 2 : 1.4;
 
